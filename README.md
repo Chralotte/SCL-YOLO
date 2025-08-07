@@ -199,7 +199,7 @@ If you use SCL-YOLO in your research, please cite our paper:
 
 ## Contact
 
-- Yang Fu - [email]
+- Yang Fu - 429564385@qq.com
 - Yong Hong Wu - whyflying2008@163.com
 
 ## License
