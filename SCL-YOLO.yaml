@@ -1,0 +1,174 @@
+# SCL-YOLO Configuration File
+
+# Model parameters
+model:
+  type: 'SCL-YOLO'
+  backbone: 'StarNet_s050'
+  neck: 'CAPFFN'
+  head: 'LEDH'
+  
+  # Model architecture
+  depth_multiple: 0.33  # model depth multiple
+  width_multiple: 0.25  # layer channel multiple
+  
+  # Anchor parameters
+  anchors: 3  # number of anchors per level
+  
+# Backbone configuration (StarNet_s050)
+backbone:
+  type: 'StarNet_s050'
+  out_indices: [2, 4, 6]  # output feature map indices
+  frozen_stages: -1
+  norm_eval: False
+
+# Neck configuration (CAPFFN)
+neck:
+  type: 'CAPFFN'
+  in_channels: [128, 256, 512]
+  out_channels: 256
+  num_outs: 3
+  
+  # RCM (Rectangular Self-Calibration Module)
+  rcm:
+    kernel_size: 7
+    pool_types: ['horizontal', 'vertical']
+    
+  # PCE (Pyramid Context Extraction)
+  pce:
+    pyramid_levels: [1, 2, 4, 8]
+    num_rcm_blocks: 3
+    
+  # FBM (FuseBlockMulti) & DIF (DynamicInterpolationFusion)
+  fusion:
+    interpolation_mode: 'bilinear'
+    align_corners: False
+
+# Head configuration (LEDH)
+head:
+  type: 'LEDH'
+  num_classes: 3  # RBC, WBC, Platelet
+  in_channels: 256
+  feat_channels: 256
+  
+  # Group convolution parameters
+  groups: 4
+  use_weight_sharing: True
+  
+  # Detection branches
+  num_reg_convs: 2
+  num_cls_convs: 2
+  
+  # Loss configuration
+  loss_cls:
+    type: 'FocalLoss'
+    use_sigmoid: True
+    gamma: 2.0
+    alpha: 0.25
+    loss_weight: 1.0
+    
+  loss_bbox:
+    type: 'IoULoss'
+    mode: 'linear'
+    eps: 1e-6
+    reduction: 'mean'
+    loss_weight: 2.0
+    
+  loss_obj:
+    type: 'BCELoss'
+    use_sigmoid: True
+    loss_weight: 1.0
+
+# Training configuration
+train:
+  epochs: 100
+  batch_size: 16
+  img_size: 640
+  
+  # Optimizer
+  optimizer:
+    type: 'AdamW'
+    lr: 0.01
+    weight_decay: 0.0005
+    
+  # Learning rate scheduler
+  lr_scheduler:
+    type: 'CosineAnnealingLR'
+    T_max: 100
+    eta_min: 0.0001
+    
+  # Data augmentation
+  augmentation:
+    mosaic: 1.0
+    mixup: 0.1
+    copy_paste: 0.1
+    hsv_h: 0.015
+    hsv_s: 0.7
+    hsv_v: 0.4
+    degrees: 0.0
+    translate: 0.1
+    scale: 0.9
+    shear: 0.0
+    perspective: 0.0
+    flipud: 0.0
+    fliplr: 0.5
+
+# Validation configuration
+val:
+  batch_size: 32
+  img_size: 640
+  conf_thres: 0.001
+  iou_thres: 0.6
+  max_det: 300
+  
+# Test configuration
+test:
+  batch_size: 1
+  img_size: 640
+  conf_thres: 0.25
+  iou_thres: 0.45
+  max_det: 300
+  save_txt: True
+  save_conf: True
+
+# Dataset paths (will be overridden by dataset-specific configs)
+data:
+  path: ''
+  train: 'images/train'
+  val: 'images/val'
+  test: 'images/test'
+  
+  # Class names
+  names:
+    0: 'RBC'
+    1: 'WBC' 
+    2: 'Platelet'
+    
+  # Number of classes
+  nc: 3
+
+# Hardware configuration
+device: ''  # auto-detect
+workers: 8
+pin_memory: True
+
+# Logging
+project: 'runs/train'
+name: 'scl_yolo'
+exist_ok: False
+verbose: True
+
+# Model saving
+save_period: 10
+save_last: True
+save_best: True
+
+# Mixed precision training
+amp: True
+
+# Evaluation metrics
+metrics:
+  - 'mAP50'
+  - 'mAP50-95'
+  - 'precision'
+  - 'recall'
+  - 'F1'
