@@ -1,0 +1,41 @@
+# Core dependencies
+torch>=2.0.0
+torchvision>=0.15.0
+numpy>=1.21.0
+opencv-python>=4.6.0
+Pillow>=8.3.0
+
+# YOLO framework
+ultralytics>=8.0.0
+
+# Data handling
+pandas>=1.3.0
+PyYAML>=6.0
+scipy>=1.7.0
+
+# Visualization
+matplotlib>=3.5.0
+seaborn>=0.11.0
+tqdm>=4.62.0
+
+# Metrics and evaluation
+scikit-learn>=1.0.0
+tensorboard>=2.8.0
+
+# Image processing
+albumentations>=1.3.0
+imgaug>=0.4.0
+
+# Utilities
+psutil>=5.8.0
+thop>=0.1.1
+fvcore>=0.1.5
+
+# Optional: For deployment
+onnx>=1.12.0
+onnxruntime>=1.12.0
+
+# Development tools (optional)
+pytest>=6.0.0
+black>=22.0.0
+flake8>=4.0.0
