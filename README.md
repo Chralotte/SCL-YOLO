@@ -178,18 +178,6 @@ SCL-YOLO/
 └── README.md               # This file
 ```
 
-## Citation
-
-If you use SCL-YOLO in your research, please cite our paper:
-
-```bibtex
-@article{fu2024scl,
-  title={SCL-YOLO: A Lightweight Model Based on Improved YOLOv11n and its Application in Blood Cell Object Detection},
-  author={Fu, Yang and Wu, Yong Hong},
-  journal={arXiv preprint arXiv:xxxx.xxxxx},
-  year={2024}
-}
-```
 
 ## Acknowledgments
 
